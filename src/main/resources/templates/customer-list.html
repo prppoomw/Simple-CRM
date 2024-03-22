@@ -9,6 +9,8 @@
 		<div class = "container">
 			<h3 align = "center"> CRM </h3>
 			<h4 align = "center"> Simple Customer Relationship Management System </h4>
+			<hr>
+			<a th:href="@{/customers/addForm}" class="btn btn-outline-secondary">Add Customer</a>
 		</div>
 		<hr>
 		<table class = "table table-bordered table-striped">
@@ -29,9 +31,34 @@
 						<td th:text= ${tempCustomer.address}></td>
 						<td th:text= ${tempCustomer.phoneNumber}></td>
 						<td th:text= ${tempCustomer.email}></td>
+						<td>
+							<a th:href="@{/customers/updateForm(customerId=${tempCustomer.id})}"
+								class="btn btn-info btn-sm">Update</a>
+						</td>
+						<td>
+						    <a href="#" class="btn btn-danger btn-sm" th:onclick="'deleteCustomer(event, ' + ${tempCustomer.id} + ');'">Delete</a>
+						</td>
 					</tr>
 				</tbody>
 			</thead>
 		</table>
+		<script>
+    function deleteCustomer(event, customerId) {
+        event.preventDefault();
+        if (confirm("Are you sure you want to delete this customer?")) {
+			console.log(customerId);
+            fetch('/customers/delete/' + customerId, {
+                method: 'DELETE'
+            }).then(response => {
+                if (response.ok) {
+                    window.location.href = "/customers/list";
+                } else {
+                    alert('An error occurred while deleting the customer.');
+                }
+            });
+        }
+    }
+</script>
+
 	</body>
 </html>

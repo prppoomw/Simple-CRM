@@ -10,5 +10,11 @@ import com.CustomerRelationshipManagement.entity.Customer;
 public interface CustomerService {
 
 	List<Customer> findAllCustomer();
+
+	void save(Customer customer);
+
+	Customer findCustomerById(Integer id);
+
+	void deleteById(Integer id);
 	
 }
