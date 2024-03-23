@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.CustomerRelationshipManagement.entity.Customer;
 import com.CustomerRelationshipManagement.service.CustomerService;
+import com.CustomerRelationshipManagement.service.EmailService;
 
 
 @Controller
@@ -26,6 +27,9 @@ public class CustomerController {
 	
 	@Autowired
 	CustomerService customerService;
+	
+	@Autowired
+	EmailService emailService;
 	
 	@GetMapping("/list")
 	public String listCustomer(Model model) {
@@ -44,6 +48,7 @@ public class CustomerController {
 	@PostMapping("/save")
 	public String saveCustomer(@ModelAttribute("customer") Customer customer) {
 		customerService.save(customer);
+		emailService.sendMail(customer.getEmail(), customer.getFirstName(), customer.getLastName());
 		return "redirect:/customers/list";
 	}
 	
