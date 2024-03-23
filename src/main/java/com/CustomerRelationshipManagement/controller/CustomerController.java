@@ -16,9 +16,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.CustomerRelationshipManagement.constant.CRMConstant;
 import com.CustomerRelationshipManagement.entity.Customer;
+import com.CustomerRelationshipManagement.service.ConsumerService;
 import com.CustomerRelationshipManagement.service.CustomerService;
 import com.CustomerRelationshipManagement.service.EmailService;
+import com.CustomerRelationshipManagement.service.ProducerService;
 
 
 @Controller
@@ -30,6 +33,12 @@ public class CustomerController {
 	
 	@Autowired
 	EmailService emailService;
+	
+	@Autowired
+	ProducerService producerService;
+	
+	@Autowired
+	ConsumerService consumerService;
 	
 	@GetMapping("/list")
 	public String listCustomer(Model model) {
@@ -47,7 +56,8 @@ public class CustomerController {
 	
 	@PostMapping("/save")
 	public String saveCustomer(@ModelAttribute("customer") Customer customer) {
-		customerService.save(customer);
+		producerService.sendMessage(CRMConstant.TOPIC_NAME, customer);
+		//customerService.save(customer);
 		emailService.sendMail(customer.getEmail(), customer.getFirstName(), customer.getLastName());
 		return "redirect:/customers/list";
 	}
